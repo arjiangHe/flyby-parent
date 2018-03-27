@@ -20,7 +20,7 @@ public class GithubController {
 
     @RequestMapping(value = "/test/github")
     public void testGitHub(HttpServletRequest request){
-        Map<String, String[]> map = request.getParameterMap() ;
+        Map<String, String[]> map = request.getParameterMap();
         logger.info(JSON.toJSONString(map));
     }
 }
