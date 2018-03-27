@@ -101,7 +101,8 @@
 
     <modules>
         <module>eureka</module>
-        <module>corpuser</module>
+        <module>corp-user</module>
         <module>common-lib</module>
+        <module>common-db</module>
     </modules>
 </project>
