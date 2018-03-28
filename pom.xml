@@ -85,24 +85,11 @@
         </dependency>
     </dependencies>
 
-    <!-- 构件部署仓库 -->
-    <!--<distributionManagement>-->
-        <!--<repository>-->
-            <!--<id>releases</id>-->
-            <!--<name>发布版本仓库</name>-->
-            <!--<url>http://192.168.32.7:7070/nexus/content/repositories/releases/</url>-->
-        <!--</repository>-->
-        <!--<snapshotRepository>-->
-            <!--<id>snapshots</id>-->
-            <!--<name>快照版本仓库</name>-->
-            <!--<url>http://192.168.32.7:7070/nexus/content/repositories/snapshots/</url>-->
-        <!--</snapshotRepository>-->
-    <!--</distributionManagement>-->
-
     <modules>
         <module>eureka</module>
         <module>corp-user</module>
         <module>common-lib</module>
         <module>common-db</module>
+        <module>common-model</module>
     </modules>
 </project>
