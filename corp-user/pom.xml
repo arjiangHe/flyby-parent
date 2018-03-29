@@ -26,15 +26,22 @@
 	</properties>
 
 	<dependencies>
-		<!--feign依赖-->
+		<!--加载配置中心文件-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<!--feign依赖 此处版本号一定要写 ，不谢会和加载配置中心配置冲突，具体原因未查明-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
+			<version>1.4.0.RELEASE</version>
 		</dependency>
 		<!--断路器-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
+			<version>1.4.0.RELEASE</version>
 		</dependency>
 		<!--Hystrix 仪表盘-->
 		<!--<dependency>-->

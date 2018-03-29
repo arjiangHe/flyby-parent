@@ -1,23 +1,12 @@
 package com.flybycloud.zuul.server.filter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.http.ServletInputStreamWrapper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StreamUtils;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 
 /**
  * 过滤器 示例
@@ -65,58 +54,59 @@ public class MyFilter extends ZuulFilter {
      */
     @Override
     public Object run() {
+        logger.info("加载过滤器逻辑开始");
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         String contentType = request.getContentType();
         String token = request.getHeader("token");
-        if(StringUtils.isEmpty(token)){
-            ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
-            ctx.setResponseStatusCode(HttpStatus.SC_OK);
-            ctx.setResponseBody("校验失败");
-            ctx.set("isSuccess", false);
-            //解决返回字符串中文乱码问题
-            HttpServletResponse response = ctx.getResponse();
-            response.addHeader("Access-Control-Allow-Origin", "*");
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html;charset=UTF-8");
-            response.setLocale(new java.util.Locale("zh","CN"));
-            return null;
-        }
-        //排除文件上传路径的的请求
-        if(contentType != null && !contentType.contains("multipart/form-data")){
-            InputStream in = null;
-            try {
-                in = ctx.getRequest().getInputStream();
-                String body = StreamUtils.copyToString(in, Charset.forName("UTF-8"));
-                JSONObject json = JSONObject.parseObject(body);
-                if(json == null){
-                    json = new JSONObject();
-                }
-                final byte[] reqBodyBytes = json.toString().getBytes();
-                ctx.setRequest(new HttpServletRequestWrapper(request){
-                    @Override
-                    public ServletInputStream getInputStream() throws IOException {
-                        return new ServletInputStreamWrapper(reqBodyBytes);
-                    }
-                    @Override
-                    public int getContentLength() {
-                        return reqBodyBytes.length;
-                    }
-                    @Override
-                    public long getContentLengthLong() {
-                        return reqBodyBytes.length;
-                    }
-                });
-            } catch (IOException e) {
-                logger.error("zuul过滤器设置用户信息失败", e);
-            }finally {
-                IOUtils.closeQuietly(in);
+//        if(StringUtils.isEmpty(token)){
+//            ctx.setSendZuulResponse(false);// 过滤该请求，不对其进行路由
+//            ctx.setResponseStatusCode(HttpStatus.SC_OK);
+//            ctx.setResponseBody("校验失败");
+//            ctx.set("isSuccess", false);
+//            //解决返回字符串中文乱码问题
+//            HttpServletResponse response = ctx.getResponse();
+//            response.addHeader("Access-Control-Allow-Origin", "*");
+//            response.setContentType("application/json");
+//            response.setCharacterEncoding("UTF-8");
+//            response.setContentType("text/html;charset=UTF-8");
+//            response.setLocale(new java.util.Locale("zh","CN"));
+//            return null;
+//        }
+//        //排除文件上传路径的的请求
+//        if(contentType != null && !contentType.contains("multipart/form-data")){
+//            InputStream in = null;
+//            try {
+//                in = ctx.getRequest().getInputStream();
+//                String body = StreamUtils.copyToString(in, Charset.forName("UTF-8"));
+//                JSONObject json = JSONObject.parseObject(body);
+//                if(json == null){
+//                    json = new JSONObject();
+//                }
+//                final byte[] reqBodyBytes = json.toString().getBytes();
+//                ctx.setRequest(new HttpServletRequestWrapper(request){
+//                    @Override
+//                    public ServletInputStream getInputStream() throws IOException {
+//                        return new ServletInputStreamWrapper(reqBodyBytes);
+//                    }
+//                    @Override
+//                    public int getContentLength() {
+//                        return reqBodyBytes.length;
+//                    }
+//                    @Override
+//                    public long getContentLengthLong() {
+//                        return reqBodyBytes.length;
+//                    }
+//                });
+//            } catch (IOException e) {
+//                logger.error("zuul过滤器设置用户信息失败", e);
+//            }finally {
+//                IOUtils.closeQuietly(in);
                 ctx.setSendZuulResponse(true);// 对该请求进行路由
                 ctx.setResponseStatusCode(HttpStatus.SC_OK);
                 ctx.set("isSuccess", true);// 设值，可以在多个过滤器时使用
-            }
-        }
+//            }
+//        }
         return null;
     }
 
